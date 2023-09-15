@@ -1,0 +1,65 @@
+﻿<h1>新增運動項目</h1>
+
+<v-form v-model="valid" v-on:submit.prevent="submitForm">
+    <v-container>
+        <v-row>
+            <v-col cols="6">
+                <v-text-field v-model="form.name"
+                              :rules="nameRules"
+                              label="項目名稱"
+                              required></v-text-field>
+            </v-col>
+
+        </v-row>
+        <v-row>
+            <v-col cols="6">
+                <v-textarea v-model="form.description"
+                            label="簡短介紹"></v-textarea>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="6">
+                <v-exercise-tag-combobox v-model="form.tags" :exercise-tag-items="exerciseTagItems" :category-items="tagCategoryItems"></v-exercise-tag-combobox>
+            </v-col>
+        </v-row>
+    </v-container>
+</v-form>
+
+@section Scripts {
+    <script src="~/js/components/exerciseTagCombobox.js" asp-append-version="true"></script>
+
+    <script>
+        const mainApp = createApp({
+            components: {
+                "v-exercise-tag-combobox": exerciseTagCombobox,
+            },
+            data() {
+                return {
+                    valid: false,
+                    form: {
+                        name: '',
+                        description: '',
+                        tags: [],
+                        FieldSchemas: [],
+                    },
+                    nameRules: [textRequiredRule],
+                    exerciseTagItems: [],
+                    tagCategoryItems: [],
+                }
+            },
+            created() {
+                axios.get('@Url.Api("ExerciseTag")')
+                    .then(response => this.exerciseTagItems = response.data)
+                    .catch(ex => console.error(ex))
+                axios.get('@Url.Api("ExerciseTagCategory")')
+                    .then(response => this.tagCategoryItems = response.data)
+                    .catch(ex => console.error(ex))
+            },
+            methods: {
+                async submitForm() {
+                    
+                },
+            },
+        }).use(vuetify).mount('#main')
+    </script>
+}

@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wax.Domain", "Wax.Domain\Wax.Domain.csproj", "{5DE1021C-A79A-4E6B-954E-632C88FA2120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wax.Domain", "Wax.Domain\Wax.Domain.csproj", "{5DE1021C-A79A-4E6B-954E-632C88FA2120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wax.MVC", "Wax.MVC\Wax.MVC.csproj", "{460C98EA-CE6E-4451-87A3-600B63D06DCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wax.Infra.Memory", "Wax.Infra.Memory\Wax.Infra.Memory.csproj", "{1C68D64D-C6A9-425B-9800-607AAA090D59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{5DE1021C-A79A-4E6B-954E-632C88FA2120}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DE1021C-A79A-4E6B-954E-632C88FA2120}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DE1021C-A79A-4E6B-954E-632C88FA2120}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460C98EA-CE6E-4451-87A3-600B63D06DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460C98EA-CE6E-4451-87A3-600B63D06DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460C98EA-CE6E-4451-87A3-600B63D06DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460C98EA-CE6E-4451-87A3-600B63D06DCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C68D64D-C6A9-425B-9800-607AAA090D59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C68D64D-C6A9-425B-9800-607AAA090D59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C68D64D-C6A9-425B-9800-607AAA090D59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C68D64D-C6A9-425B-9800-607AAA090D59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

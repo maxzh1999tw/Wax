@@ -1,13 +1,14 @@
-﻿using Wax.Domain.Exercises.FieldComputings;
-using Wax.Domain.Training;
+﻿using Wax.Domain.Training;
 using Wax.Domain.Users;
+using Wax.Domain.Utilities;
+using Wax.Domain.Utilities.Records;
 
 namespace Wax.Domain.Exercises
 {
     /// <summary>
     /// 訓練項目
     /// </summary>
-    public class Exercise
+    public class Exercise : BaseEditableRecord, IEntity, IEditableRecord
     {
         public int Id { get; set; }
 
@@ -21,17 +22,11 @@ namespace Wax.Domain.Exercises
         /// </summary>
         public IEnumerable<ExerciseFieldSchema> FieldSchemas { get; set; }
 
-        /// <summary>
-        /// 訓練量計算方式
-        /// </summary>
-        public IExerciseFieldsComputingPolicy ScoreComputingPolicy { get; set; }
-
-        public Exercise(int id, ExerciseInfo info, IEnumerable<ExerciseFieldSchema> fieldSchemas, IExerciseFieldsComputingPolicy scoreComputingPolicy)
+        public Exercise(ExerciseInfo info, IEnumerable<ExerciseFieldSchema> fieldSchemas, int id = default)
         {
             Id = id;
             Info = info;
             FieldSchemas = fieldSchemas;
-            ScoreComputingPolicy = scoreComputingPolicy;
         }
 
         /// <summary>
@@ -47,11 +42,7 @@ namespace Wax.Domain.Exercises
             var tempFieldDatas = new List<TrainingRecordFieldData>(FieldSchemas.Count());
             foreach (var fieldSchema in FieldSchemas)
             {
-                var fieldData = fieldDatas.FirstOrDefault(x => x.Name == fieldSchema.Name);
-                if(fieldData == null)
-                {
-                    throw new ArgumentException($"訓練資料缺少某些欄位");
-                }
+                var fieldData = fieldDatas.FirstOrDefault(x => x.Name == fieldSchema.Name) ?? throw new ArgumentException($"訓練資料缺少某些欄位");
                 if (!fieldSchema.ValidateValue(fieldData.Value))
                 {
                     throw new ArgumentException($"{nameof(TrainingRecordFieldData)}.${nameof(TrainingRecordFieldData.Value)} 的資料內容不符合規範。");
