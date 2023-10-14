@@ -3,11 +3,10 @@
     <v-dialog v-model="show">
         <v-card title="Dialog">
             <v-card-text>
-                <v-text-field v-model="tag.name"
-                              label="標籤名稱"
-                              required></v-text-field>
-
-                <v-select v-model="tag.category" label="標籤類別" :items="categoryItems" item-title="key" ></v-select>
+                <v-form ref="form">
+                    <v-text-field v-model="tag.name" label="標籤名稱" :rules="nameRules"></v-text-field>
+                    <v-select v-model="tag.category" label="標籤類別" :items="categoryItems" :rules="categoryRules"></v-select>
+                </v-form>
             </v-card-text>
 
             <v-card-actions>
@@ -26,6 +25,8 @@
                 category: null,
                 name: '',
             },
+            nameRules: [validateRule.lengthRequiredRule],
+            categoryRules: [validateRule.notEmptyRule],
         }
     },
     props: {
@@ -36,34 +37,36 @@
     },
     methods: {
         open(name) {
-            this.tag.name = name
-            this.tag.category = null
+            this.tag = {
+                name: name,
+                category: this.categoryItems.firstOrDefault()?.value
+            }
             let self = this
             return new Promise((resolve, reject) => {
                 self.resolve = resolve
                 self.show = true
             })
         },
-        submit() {
-            if (this.tag.name == null || this.tag.name.length < 1) {
-                alertHelper.alert("請輸入標籤名稱")
-                return
+        async submit() {
+            const result = await this.$refs.form.validate()
+            if (result.valid) {
+                this.show = false;
+                this.resolve({
+                    title: this.tag.name,
+                    value: this.tag,
+                })
             }
-
-            if (!this.categoryItems.some(x => x.value == this.tag.category)) {
-                this.tag.category = null
-                alertHelper.alert("請輸入標籤類別")
-                return
-            }
-
-            this.show = false;
-            this.resolve(Object.assign({}, this.tag))
         }
     },
     watch: {
         show() {
             if (!this.show) {
                 this.resolve(false)
+            }
+            else {
+                this.$nextTick(() => {
+                    this.$refs.form.$el.querySelector('input').focus();
+                });
             }
         }
     },
@@ -75,15 +78,17 @@ const exerciseTagCombobox = {
                 v-model:search="search"
                 :hide-no-data="false"
                 :items="exerciseTagItems"
-                item-title="name"
+                :return-object="false"
                 @keydown.enter.prevent="addingNewTag"
                 multiple
                 hide-selected
-                persistent-hint>
+                persistent-hint
+                v-bind="$attrs">
         <template v-slot:selection="{item, index}">
             <v-chip
-                :key="JSON.stringify(item.raw)"
-                :color="getChipColor(item.raw.category)">
+                :key="JSON.stringify(item.value)"
+                :color="getChipColor(item.value.category)"
+                class="me-1">
                 {{ item.title }}
             </v-chip>
         </template>
@@ -119,14 +124,15 @@ const exerciseTagCombobox = {
         categoryItems: {
             type: Array,
             required: true,
-        }
+        },
     },
     methods: {
         async addingNewTag() {
             let search = this.search;
             var tag = await this.$refs.tagEditDialog.open(search)
             if (tag) {
-                this.selected.push(tag)
+                this.$emit('update:exerciseTagItems', [...this.exerciseTagItems, tag])
+                this.selected.push(tag.value)
             }
             this.selected = this.selected.filter(x => x != search)
         },

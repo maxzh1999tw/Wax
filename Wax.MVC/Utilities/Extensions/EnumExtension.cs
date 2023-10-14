@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using Wax.MVC.Models.Shared;
 
 namespace Wax.MVC.Utilities.Extensions
 {
     internal static class EnumExtension
     {
-        public static IEnumerable<KeyValuePair<string, TEnum>> ToListItems<TEnum>() where TEnum : Enum
+        public static IEnumerable<VuetifySelectItem> ToSelectItems<TEnum>() where TEnum : Enum
         {
             return Enum.GetValues(typeof(TEnum))
                        .Cast<TEnum>()
-                       .Select(e => new KeyValuePair<string, TEnum>(e.GetDisplayName(), e))
+                       .Select(e => new VuetifySelectItem(e.GetDisplayName(), e))
                        .ToArray();
         }
 

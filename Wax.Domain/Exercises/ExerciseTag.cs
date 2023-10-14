@@ -14,6 +14,12 @@ namespace Wax.Domain.Exercises
             Name = name;
         }
 
+        public ExerciseTag()
+        {
+            Category = ExerciseTagCategory.None;
+            Name = string.Empty;
+        }
+
         #region === 相等比較 ===
 
         public override bool Equals(object? obj) => Equals(obj as ExerciseTag?);

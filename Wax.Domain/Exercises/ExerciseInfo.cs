@@ -1,6 +1,6 @@
 ﻿namespace Wax.Domain.Exercises
 {
-    public class ExerciseInfo
+    public readonly struct ExerciseInfo
     {
         public string Name { get; init; }
 

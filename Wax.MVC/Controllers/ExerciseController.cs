@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Wax.Domain.Exercises;
+using Wax.MVC.Models.Exercises;
+using Wax.MVC.Models.Shared;
 using Wax.MVC.Utilities.Extensions;
 
 namespace Wax.MVC.Controllers
@@ -15,8 +17,10 @@ namespace Wax.MVC.Controllers
 
         #region === View ===
 
+        [HttpGet]
         public IActionResult Index() => View();
 
+        [HttpGet]
         public IActionResult Create() => View();
 
         #endregion
@@ -40,15 +44,35 @@ namespace Wax.MVC.Controllers
         public async Task<IActionResult> GetExerciseTags()
         {
             var exerciseTags = await _exerciseRepository.GetAllExerciseTagsAsync();
-            return Json(exerciseTags);
+            return Json(exerciseTags.Select(x => new VuetifySelectItem(x.Name, x)));
         }
 
         [Route("/Api/ExerciseTagCategory")]
         [HttpGet]
         public IActionResult GetExerciseTagCategorys()
         {
-            var exerciseTagCategorys = EnumExtension.ToListItems<ExerciseTagCategory>();
+            var exerciseTagCategorys = EnumExtension.ToSelectItems<ExerciseTagCategory>();
             return Json(exerciseTagCategorys);
+        }
+
+        [Route("/Api/ExerciseFieldType")]
+        [HttpGet]
+        public IActionResult GetExerciseFieldTypes()
+        {
+            var exerciseTagCategorys = EnumExtension.ToSelectItems<ExerciseFieldType>();
+            return Json(exerciseTagCategorys);
+        }
+
+        [Route("/Api/Exercise")]
+        [HttpPost]
+        public IActionResult InsertExercise([FromBody]ExerciseDto exercise)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Created($"/Api/Exercise/{exercise.Id}", exercise);
         }
 
         #endregion

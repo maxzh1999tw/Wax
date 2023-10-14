@@ -51,7 +51,7 @@ namespace Wax.Domain.Exercises
                 tempFieldDatas.Add(fieldData);
             }
 
-            return new TrainingRecord(this, fieldDatas, trainingTime, user);
+            return new TrainingRecord(this, tempFieldDatas, trainingTime, user);
         }
     }
 }

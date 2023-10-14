@@ -8,5 +8,9 @@
     alert(message) {
         alert(message)
         return Promise.resolve()
-    }
+    },
+
+    confirm(message) {
+        return Promise.resolve(confirm('您確定要刪除這個項目嗎？'))
+    },
 }
